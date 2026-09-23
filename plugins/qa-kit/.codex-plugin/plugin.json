@@ -1,0 +1,42 @@
+{
+  "name": "qa-kit",
+  "version": "0.1.0",
+  "description": "QA toolkit: clarify and solve problems (grill-me, brainstorm, problem-solving, predict), generate test cases and edge cases, write Playwright/Vitest/k6 automation, run and audit test suites, explore apps in a browser, and debug failures to root cause.",
+  "author": {
+    "name": "huutri",
+    "email": "huutrimega@gmail.com"
+  },
+  "keywords": [
+    "qa",
+    "testing",
+    "test-cases",
+    "edge-cases",
+    "playwright",
+    "vitest",
+    "k6",
+    "e2e",
+    "debugging",
+    "brainstorm",
+    "grill-me",
+    "problem-solving",
+    "risk-analysis"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "QA Kit",
+    "shortDescription": "Clarify problems, generate test cases, write test automation",
+    "longDescription": "Nine skills in one plugin. Clarify and solve: grill-me stress-tests a plan a round of questions at a time, brainstorm turns fuzzy intent into an outcome contract and compares approaches, problem-solving reframes a stuck problem, and predict has five expert personas debate a risky change. Test: scenario generates test cases and edge cases across 12 dimensions, test runs, creates, optimizes, and audits suites, web-testing writes Playwright, Vitest, and k6 automation, agent-browser drives exploratory QA in a browser, and debug proves the root cause of a failure before any fix.",
+    "developerName": "huutri",
+    "category": "Engineering",
+    "capabilities": [
+      "Interactive",
+      "Read",
+      "Write"
+    ],
+    "defaultPrompt": [
+      "Use $qa-kit:grill-me to stress-test my plan for the checkout redesign",
+      "Use $qa-kit:scenario to generate test cases and edge cases for src/api/payment.ts",
+      "Use $qa-kit:web-testing to write Playwright E2E tests for the checkout flow"
+    ]
+  }
+}

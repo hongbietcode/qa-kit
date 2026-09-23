@@ -1,0 +1,30 @@
+# OS and editor files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# Dependencies
+node_modules/
+
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+npm-debug.log*
+
+# Output produced when the kit's skills run inside this repo
+qa-reports/
+plans/reports/
+scenario-results.tsv
+test-results/
+playwright-report/
+blob-report/
+coverage/
+
+# Codex agents written by `install-codex-agents.mjs --project`
+.codex/

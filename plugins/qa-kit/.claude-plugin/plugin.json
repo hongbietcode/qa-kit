@@ -1,0 +1,25 @@
+{
+  "name": "qa-kit",
+  "version": "0.1.0",
+  "description": "QA toolkit: clarify and solve problems (grill-me, brainstorm, problem-solving, predict), generate test cases and edge cases, write Playwright/Vitest/k6 automation, run and audit test suites, explore apps in a browser, and debug failures to root cause.",
+  "author": {
+    "name": "huutri",
+    "email": "huutrimega@gmail.com"
+  },
+  "keywords": [
+    "qa",
+    "testing",
+    "test-cases",
+    "edge-cases",
+    "playwright",
+    "vitest",
+    "k6",
+    "e2e",
+    "debugging",
+    "code-review",
+    "brainstorm",
+    "grill-me",
+    "problem-solving",
+    "risk-analysis"
+  ]
+}
