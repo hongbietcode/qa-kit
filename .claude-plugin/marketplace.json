@@ -10,8 +10,8 @@
     {
       "name": "qa-kit",
       "source": "./plugins/qa-kit",
-      "description": "Clarify and solve problems (grill-me, brainstorm, problem-solving, predict), generate test cases and edge cases, write Playwright/Vitest/k6 automation, run and audit test suites, explore apps in a browser, and debug failures. Includes tester, debugger, code-reviewer, and brainstormer agents.",
-      "version": "0.1.0",
+      "description": "Clarify and solve problems (grill-me, brainstorm, problem-solving, predict), generate test cases and edge cases, turn manual cases into Playwright tests with web-testing from-manual, write Vitest/k6 automation, run and audit suites, explore apps, and debug failures. Includes tester, debugger, code-reviewer, and brainstormer agents.",
+      "version": "0.2.0",
       "category": "testing",
       "keywords": [
         "qa",

@@ -31,24 +31,24 @@ await page.getByRole('button', { name: /submit/i }).click();
 
 ## Retry Strategies
 
+Diagnose the original failure before changing retries. Use the repository's
+normal retry policy for CI; initial verification of new tests should use zero
+retries so a failure stays visible. Per-group configuration is supported:
+
 ```javascript
-// Playwright built-in
-test.describe.configure({ retries: 3 });
-
-// Per-test
-test('flaky test', async ({ page }) => { /* */ }, { retries: 3 });
-
-// Exponential backoff
-async function retryWithBackoff(fn, maxRetries = 3) {
-  for (let i = 0; i < maxRetries; i++) {
-    try { return await fn(); }
-    catch (e) {
-      if (i === maxRetries - 1) throw e;
-      await new Promise(r => setTimeout(r, Math.pow(2, i) * 1000));
-    }
-  }
-}
+test.describe('Transient external integration', () => {
+  test.describe.configure({ retries: 1 });
+  test('loads the integration status', async ({ page }) => {
+    await page.goto('/integrations');
+    await expect(page.getByRole('status')).toHaveText('Connected');
+  });
+});
 ```
+
+This example needs the application's actual route/state. A pass after retry is
+flaky, not an initial pass. Never retry a payment, creation or deletion blindly
+inside a helper; repeated side effects can corrupt the test's evidence. See
+[Playwright retries](https://playwright.dev/docs/test-retries).
 
 ## Test Isolation
 
@@ -82,5 +82,9 @@ await page.route('**/external-api/**', route =>
 ## Flakiness Detection
 
 ```bash
-npx playwright test --repeat-each=5
+npx playwright test --repeat-each=3 --retries=0
 ```
+
+Use a scoped file/project and isolated data. Record first failures and all
+attempts; stop when missing environment/data or a confirmed product defect
+prevents useful reruns.
