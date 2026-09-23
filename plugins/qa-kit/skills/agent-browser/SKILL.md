@@ -58,6 +58,12 @@ Run `agent-browser skills list` to see everything available on the installed ver
 
 ## When to use
 
+For `web-testing from-manual`, explore only the supplied case scope and return
+route/state, account role, locator names/uniqueness, expected-vs-observed behavior
+and evidence per case. Refresh snapshot handles after page changes; they cannot
+serve as Playwright locators. The owning workflow decides coverage and writes
+tests. In its `--dry-run` mode, do not start or interact with a browser.
+
 Default for browser automation that does not depend on the user's real Chrome login state: autonomous sessions, ad-hoc navigation, screenshots, form fills, scraping, multi-tab work, self-verifying build loops, Electron desktop apps, Slack automation, and Browserbase/cloud browsers.
 
 For low-level Chrome DevTools Protocol diagnostics, use the configured `chrome-devtools-mcp` bridge or client when one is available. Reason first: if the task does not need a specific real Chrome profile, Chrome DevTools MCP may use its normal navigation tools. If it does need profile/cookie/account state, use the real-profile browser tool: open a new tab for the task and confirm its URL and account before using MCP inspection tools. See `references/agent-browser-vs-chrome-devtools.md` for the trade-off.

@@ -186,6 +186,12 @@ Halted: [after N iterations — bounded] | [saturation — 2 consecutive iterati
 
 ## Integration with Other Skills
 
+When expanding manual cases supplied through `web-testing from-manual`, preserve
+their IDs and scope. Return additional cases with steps, data, expected results,
+parent/source links and a rationale. Ground new expectations in requirements;
+unresolved expectations remain proposals. The from-manual workflow owns browser
+exploration and the manual-to-automation mapping.
+
 | Next Step | Skill | How |
 |-----------|-------|-----|
 | Turn scenarios into a test suite | `test create` | Pass the scenario table as the coverage input |

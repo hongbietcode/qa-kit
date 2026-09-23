@@ -2,6 +2,10 @@
 
 ## Setup
 
+Inspect existing configuration and the installed Playwright version first. For
+manual case conversion, follow [from-manual-workflow.md](from-manual-workflow.md).
+Only initialize when the target has no setup and adding Playwright is in scope:
+
 ```bash
 npm init playwright@latest
 npx playwright install
@@ -15,8 +19,11 @@ import { test, expect } from '@playwright/test';
 test.describe('User Login', () => {
   test('should login successfully', async ({ page }) => {
     await page.goto('/login');
-    await page.getByLabel('Email').fill('user@example.com');
-    await page.getByLabel('Password').fill('password123');
+    const email = process.env.TEST_USER_EMAIL;
+    const password = process.env.TEST_USER_PASSWORD;
+    if (!email || !password) throw new Error('Missing test account configuration');
+    await page.getByLabel('Email').fill(email);
+    await page.getByLabel('Password').fill(password);
     await page.getByRole('button', { name: 'Login' }).click();
     await expect(page).toHaveURL('/dashboard');
   });
@@ -27,34 +34,39 @@ test.describe('User Login', () => {
 
 1. `getByRole('button', { name: 'Submit' })` - Most preferred
 2. `getByLabel('Email')` - Form fields
-3. `getByPlaceholderText('Search')` - Inputs
+3. `getByPlaceholder('Search')` - Inputs
 4. `getByText('Welcome')` - Static text
-5. `getByTestId('submit-btn')` - Last resort
+5. `getByTestId('submit-btn')` - Explicit stable test contract when provided
+
+Verify accessible names and uniqueness against the real page. Official
+[locator API](https://playwright.dev/docs/locators).
 
 ## Advanced Fixtures
 
-### Worker-Scoped Authentication
+### Reuse authentication state with isolated pages
+
+Prefer the repository's existing setup project. If it already provisions an
+ignored state file, a fixture can consume its path without guessing an API or
+cookie name. Each test still receives its own context and page:
 
 ```typescript
-// fixtures/auth.ts
-export const test = baseTest.extend<{ authPage: Page }>({
-  authPage: [async ({ browser, request }, use, testInfo) => {
-    // API login per worker
-    const res = await request.post('/api/auth', {
-      data: { email: 'test@example.com', password: 'pass' }
-    });
-    const { token } = await res.json();
+import { test as base, expect } from '@playwright/test';
 
-    const context = await browser.newContext();
-    await context.addCookies([
-      { name: 'token', value: token, domain: 'localhost', path: '/' }
-    ]);
-    const page = await context.newPage();
-    await use(page);
-    await context.close();
-  }, { scope: 'worker' }]
+export const test = base.extend({
+  storageState: async ({}, use) => {
+    const statePath = process.env.PLAYWRIGHT_AUTH_STATE;
+    if (!statePath) throw new Error('Set PLAYWRIGHT_AUTH_STATE to the setup output');
+    await use(statePath);
+  },
 });
+export { expect };
 ```
+
+For mutating tests, allocate separate accounts/data when necessary. Do not share
+a `Page` as a worker-scoped fixture or depend on the test-scoped `request` fixture
+from a worker fixture. Follow the official
+[authentication guide](https://playwright.dev/docs/auth) for account-per-worker
+setup; redact auth state and keep it out of version control.
 
 ### Database Seeding Fixture
 
@@ -68,21 +80,23 @@ export const test = baseTest.extend<{ authPage: Page }>({
 
 ```typescript
 const responsePromise = page.waitForResponse('**/api/users');
-await page.click('button:text("Load")');
+await page.getByRole('button', { name: 'Load', exact: true }).click();
 await responsePromise;
 ```
 
 ### Mock API
 
 ```typescript
-await page.route('**/api/users', route =>
-  route.fulfill({ status: 200, body: JSON.stringify([]) })
+await page.route('**/third-party/users', route =>
+  route.fulfill({ status: 200, contentType: 'application/json', body: JSON.stringify([]) })
 );
 ```
 
 ## Configuration
 
 ```typescript
+import { defineConfig } from '@playwright/test';
+
 export default defineConfig({
   workers: process.env.CI ? 1 : undefined,
   fullyParallel: true,
@@ -115,5 +129,5 @@ npx playwright show-report             # View report
 ## Related
 
 - `./playwright-component-testing.md` - CT patterns
-- `./playwright-fixtures-advanced.md` - Complex fixtures
+- `./playwright-mapping.md` - Manual cases, fixtures and assertion traceability
 - `./database-testing.md` - DB fixtures

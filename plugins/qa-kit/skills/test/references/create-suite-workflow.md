@@ -3,6 +3,11 @@
 Create a test suite that covers the project's features and workflows, grounded
 in what the code and docs actually do — never in guessed behavior.
 
+When the requested suite is Playwright automation from existing manual cases,
+use `web-testing from-manual` for ingestion, exploration, generation and
+traceability. This generic suite-creation workflow remains appropriate for other
+inputs. Carry source case IDs into subsequent execution reports.
+
 ## 1. Scout the codebase and docs
 
 Scout with read-only search (parallel Explore subagents when the runtime permits) over:
